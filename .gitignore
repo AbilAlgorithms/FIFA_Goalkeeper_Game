@@ -1,0 +1,12 @@
+# IDE and Environment Files
+.idea/
+.venv/
+__pycache__/
+
+# Private Secrets
+pvt.rtf
+~$*
+
+# OS generated files
+.DS_Store
+Thumbs.db
