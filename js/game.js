@@ -105,14 +105,14 @@ class GameplayScene extends Phaser.Scene {
             fontSize: '20px', fill: '#ffffff', fontFamily: 'monospace', align: 'center', fontWeight: 'bold'
         }).setOrigin(0.5);
 
-        this.hudText = this.add.text(20, 80, '', {
+        this.hudText = this.add.text(20, 40, '', {
             fontSize: '18px', fill: '#ffffff', fontFamily: 'monospace', fontWeight: 'bold'
         });
         // Draw 3 hearts in a row (x, y, asset)
         this.heartImages = [
-            this.add.image(40, 140, 'heart').setDisplaySize(24, 24),
-            this.add.image(70, 140, 'heart').setDisplaySize(24, 24),
-            this.add.image(100, 140, 'heart').setDisplaySize(24, 24)
+            this.add.image(40, 110, 'heart').setDisplaySize(24, 24),
+            this.add.image(70, 110, 'heart').setDisplaySize(24, 24),
+            this.add.image(100, 110, 'heart').setDisplaySize(24, 24)
         ];
         this.updateHUD();
 
