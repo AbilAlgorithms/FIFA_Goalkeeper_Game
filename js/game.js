@@ -8,6 +8,11 @@ class BootScene extends Phaser.Scene {
         this.load.image('glove', 'assets/glove.png');
         this.load.image('heart', 'assets/heart.png'); // New Asset
 
+        // Audio Assets (NEW)
+        this.load.audio('bgm', 'assets/bgm.mp3');
+        this.load.audio('bounce', 'assets/bounce.wav'); // Use .mp3 if your file is mp3
+        this.load.audio('fail', 'assets/fail.wav');
+
         // We will keep the generated particle graphic because it works
         // perfectly for that blazing arcade trail effect!
         const particleGraphics = this.make.graphics({ x: 0, y: 0, add: false });
@@ -53,6 +58,10 @@ class GameplayScene extends Phaser.Scene {
     constructor() { super({ key: 'GameplayScene' }); }
 
     create() {
+    // Start Background Music
+        this.bgMusic = this.sound.add('bgm', { volume: 0.4, loop: true });
+        this.bgMusic.play();
+
         this.cameras.main.setBackgroundColor('#00aa44');
         // --- AUTHENTIC PITCH MARKINGS ---
         const pitch = this.add.graphics();
@@ -183,6 +192,8 @@ class GameplayScene extends Phaser.Scene {
     }
 
     handleSave(glove, ball) {
+    // 1. Play the bounce sound immediately!
+        this.sound.play('bounce', { volume: 0.8 });
         // Freeze ball
         const impactX = this.ball.x;
         const impactY = this.ball.y;
@@ -213,6 +224,7 @@ class GameplayScene extends Phaser.Scene {
         this.updateHUD();
 
         if (this.currentSaves >= this.savesNeeded) {
+        this.bgMusic.stop(); // CRITICAL: Stop the music before changing scenes
             this.scene.start('TransitionScene', { won: true });
         } else {
             this.time.delayedCall(600, this.shootBall, [], this);
@@ -226,6 +238,9 @@ class GameplayScene extends Phaser.Scene {
             this.cameras.main.flash(300, 255, 0, 0);
             this.cameras.main.shake(200, 0.02);
 
+// 2. Play the fail sound!
+            this.sound.play('fail', { volume: 0.7 });
+
             this.lives -= 1;
             this.streak = 0; // Reset streak!
             this.spawnFloatingText(225, 200, "STREAK LOST!", '#ff0055');
@@ -234,6 +249,8 @@ class GameplayScene extends Phaser.Scene {
             this.updateHUD();
 
             if (this.lives <= 0) {
+            // --- STOP THE MUSIC HERE RIGHT BEFORE THE SCENE CHANGES ---
+            this.bgMusic.stop();
                 this.scene.start('TransitionScene', { won: false });
             } else {
                 this.time.delayedCall(1000, this.shootBall, [], this);
