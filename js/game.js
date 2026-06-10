@@ -3,16 +3,13 @@ class BootScene extends Phaser.Scene {
     constructor() { super({ key: 'BootScene' }); }
 
     preload() {
-        const ballGraphics = this.make.graphics({ x: 0, y: 0, add: false });
-        ballGraphics.fillStyle(0xffffff, 1);
-        ballGraphics.fillCircle(15, 15, 15);
-        ballGraphics.generateTexture('ball', 30, 30);
+        // Load the real images from your assets folder
+        this.load.image('ball', 'assets/ball.png');
+        this.load.image('glove', 'assets/glove.png');
+        this.load.image('heart', 'assets/heart.png'); // New Asset
 
-        const gloveGraphics = this.make.graphics({ x: 0, y: 0, add: false });
-        gloveGraphics.fillStyle(0xff0055, 1);
-        gloveGraphics.fillRect(0, 0, 50, 50);
-        gloveGraphics.generateTexture('glove', 50, 50);
-
+        // We will keep the generated particle graphic because it works
+        // perfectly for that blazing arcade trail effect!
         const particleGraphics = this.make.graphics({ x: 0, y: 0, add: false });
         particleGraphics.fillStyle(0xffffff, 0.8);
         particleGraphics.fillCircle(4, 4, 4);
@@ -57,10 +54,32 @@ class GameplayScene extends Phaser.Scene {
 
     create() {
         this.cameras.main.setBackgroundColor('#00aa44');
-        const graphics = this.add.graphics();
-        graphics.lineStyle(6, 0xffffff, 1);
-        this.goalRect = new Phaser.Geom.Rectangle(50, 180, 350, 250);
-        graphics.strokeRect(this.goalRect.x, this.goalRect.y, this.goalRect.width, this.goalRect.height);
+        // --- AUTHENTIC PITCH MARKINGS ---
+        const pitch = this.add.graphics();
+        pitch.lineStyle(4, 0xffffff, 0.8); // 4px thick white lines with slight transparency for a "painted grass" look
+
+        // 1. The End Line (Spans the entire width of the screen at y = 150)
+        pitch.beginPath();
+        pitch.moveTo(0, 150);
+        pitch.lineTo(450, 150);
+        pitch.strokePath();
+
+        // 2. The Penalty Area (18-yard box)
+        pitch.strokeRect(45, 150, 360, 200);
+
+        // 3. The Goal Area (6-yard box)
+        pitch.strokeRect(135, 150, 180, 60);
+
+        // 4. The Penalty Spot
+        pitch.fillStyle(0xffffff, 0.8);
+        pitch.fillCircle(225, 290, 6); // x=225 (center), y=290
+
+        // 5. The Penalty Arc (The "D")
+        // We draw a partial arc centered on the penalty spot, sticking out below the penalty box
+        pitch.beginPath();
+        // arc(x, y, radius, startAngle, endAngle)
+        pitch.arc(225, 290, 90, Math.PI * 0.23, Math.PI * 0.77);
+        pitch.strokePath();
 
         this.stages = [
             { name: "GROUP STAGE", opponent: "QATAR", speed: 500 },
@@ -89,12 +108,20 @@ class GameplayScene extends Phaser.Scene {
         this.hudText = this.add.text(20, 80, '', {
             fontSize: '18px', fill: '#ffffff', fontFamily: 'monospace', fontWeight: 'bold'
         });
+        // Draw 3 hearts in a row (x, y, asset)
+        this.heartImages = [
+            this.add.image(40, 140, 'heart').setDisplaySize(24, 24),
+            this.add.image(70, 140, 'heart').setDisplaySize(24, 24),
+            this.add.image(100, 140, 'heart').setDisplaySize(24, 24)
+        ];
         this.updateHUD();
 
         // Player & Ball Physics
         this.glove = this.physics.add.sprite(225, 305, 'glove');
         this.glove.setCollideWorldBounds(true);
         this.glove.setImmovable(true);
+// Force the image to fit our established 50x50 hitbox
+        this.glove.setDisplaySize(50, 50);
 
         this.input.on('pointermove', (pointer) => {
             this.glove.x = pointer.x;
@@ -102,7 +129,10 @@ class GameplayScene extends Phaser.Scene {
         });
 
         this.ball = this.physics.add.sprite(225, 750, 'ball');
-        this.ball.setCircle(15);
+        // Force the visual image to 30x30
+        this.ball.setDisplaySize(44, 44); // Visually 44x44 pixels
+        // Keep the actual physics collision area as a perfect circle
+        this.ball.setCircle(22); // Invisible physics radius of 22
         this.ball.setBounce(1);
 
         this.particles = this.add.particles(0, 0, 'trail', {
@@ -115,12 +145,18 @@ class GameplayScene extends Phaser.Scene {
     }
 
     updateHUD() {
+        // Update the text (removed the LIVES text since we have icons now)
         this.hudText.setText(
             `SCORE: ${this.globalScore}\n` +
             `STREAK: x${this.streak}\n` +
-            `LIVES: ${this.lives}\n` +
             `SAVES: ${this.currentSaves}/${this.savesNeeded}`
         );
+
+        // Update the visual hearts
+        for (let i = 0; i < 3; i++) {
+            // If the heart's index is less than your current lives, show it. Otherwise, hide it.
+            this.heartImages[i].setVisible(i < this.lives);
+        }
     }
 
     spawnFloatingText(x, y, message, color) {
