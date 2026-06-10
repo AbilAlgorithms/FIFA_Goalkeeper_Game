@@ -1,6 +1,12 @@
-# 🧤 World Cup Goalie (V1.2) ⚽
+# 🧤 World Cup Goalie (V1.2)
 
 A fast-paced, high-contrast retro arcade browser game built to test a goalkeeper's reflexes against accelerating, unpredictable shots. Inspired by Google's FIFA mini-games, this project flips the traditional striker-focused meta on its head, placing the player directly on the goal line.
+
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Phaser](https://img.shields.io/badge/Phaser-820L24?style=for-the-badge&logo=phaser&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
 🚀 **[Live Production Deployment on Netlify](https://worldcupgoalie.netlify.app)**
 
@@ -43,13 +49,15 @@ If you want to clone this repository and run the engine locally on your machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/AbilAlgorithms/worldcup-goalkeeper.git](https://github.com/AbilAlgorithms/worldcup-goalkeeper.git)
+   git clone https://github.com/AbilAlgorithms/worldcup-goalkeeper.git
    cd worldcup-goalkeeper
+   
 2. **Run a local development server:**
 Since the engine loads assets via relative paths, your browser might block asset fetching via the file:// protocol due to CORS security restrictions. Run it via a local environment (like PyCharm's built-in server, VS Code Live Server, or Python's HTTP module):
        python -m http.server 8000
+   Open your browser and navigate to http://localhost:8000.
 
-3. **📁 Repository Structure**
+4. **📁 Repository Structure**
 
 world-cup-goalkeeper/
 ├── assets/          # Sprites, UI icons, and audio assets (.mp3, .wav)
