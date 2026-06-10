@@ -45,3 +45,24 @@ If you want to clone this repository and run the engine locally on your machine:
    ```bash
    git clone [https://github.com/AbilAlgorithms/worldcup-goalkeeper.git](https://github.com/AbilAlgorithms/worldcup-goalkeeper.git)
    cd worldcup-goalkeeper
+2. **Run a local development server:**
+Since the engine loads assets via relative paths, your browser might block asset fetching via the file:// protocol due to CORS security restrictions. Run it via a local environment (like PyCharm's built-in server, VS Code Live Server, or Python's HTTP module):
+       python -m http.server 8000
+
+3. **📁 Repository Structure**
+
+world-cup-goalkeeper/
+├── assets/          # Sprites, UI icons, and audio assets (.mp3, .wav)
+├── css/             # Visual stylesheets
+├── js/
+│   ├── api.js       # Supabase client interaction layers
+│   ├── game.js      # Game loop, scene configurations, and physics
+│   └── main.js      # Global initializers
+├── .gitignore       # Security configuration to prevent tracking of lock files
+└── index.html       # Single Page Application canvas mount point
+
+4. **⚖️ License**
+   Distributed under the MIT License. See LICENSE for more information.
+
+Developed by Abifazal Talib Tankiwala - Aspiring AI/ML & Web Engineer.
+   
