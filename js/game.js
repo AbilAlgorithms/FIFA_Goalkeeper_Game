@@ -59,7 +59,7 @@ class GameplayScene extends Phaser.Scene {
 
     create() {
     // Start Background Music
-        this.bgMusic = this.sound.add('bgm', { volume: 0.4, loop: true });
+        this.bgMusic = this.sound.add('bgm', { volume: 0.8, loop: true });
         this.bgMusic.play();
 
         this.cameras.main.setBackgroundColor('#00aa44');
@@ -193,7 +193,7 @@ class GameplayScene extends Phaser.Scene {
 
     handleSave(glove, ball) {
     // 1. Play the bounce sound immediately!
-        this.sound.play('bounce', { volume: 0.8 });
+        this.sound.play('bounce', { volume: 0.5 });
         // Freeze ball
         const impactX = this.ball.x;
         const impactY = this.ball.y;
@@ -239,7 +239,7 @@ class GameplayScene extends Phaser.Scene {
             this.cameras.main.shake(200, 0.02);
 
 // 2. Play the fail sound!
-            this.sound.play('fail', { volume: 0.7 });
+            this.sound.play('fail', { volume: 0.6 });
 
             this.lives -= 1;
             this.streak = 0; // Reset streak!
